@@ -38,6 +38,23 @@ final class ViewController: ASDKViewController<ASDisplayNode> {
         let displayLink = CADisplayLink(target: self, selector: #selector(displayLinkUpdated(sender:)))
         displayLink.add(to: .main, forMode: .tracking)
         
+        setIntelligentPreloading()
+    }
+    
+    private func setIntelligentPreloading() {
+        var preloadTuning = ASRangeTuningParameters()
+        preloadTuning.leadingBufferScreenfuls = 3
+        preloadTuning.trailingBufferScreenfuls = 3
+        
+        collectionViewNode.setTuningParameters(preloadTuning, for: .preload)
+        
+        var displayTuning = ASRangeTuningParameters()
+        displayTuning.leadingBufferScreenfuls = 2
+        displayTuning.trailingBufferScreenfuls = 2
+        
+        collectionViewNode.setTuningParameters(displayTuning, for: .display)
+        
+        collectionViewNode.leadingScreensForBatching = 2
     }
     
     @objc private func displayLinkUpdated(sender: CADisplayLink) {
